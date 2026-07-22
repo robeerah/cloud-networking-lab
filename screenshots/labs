@@ -1,23 +1,21 @@
 
 
-## Lab 1: Created 2 Virtual Networks with VMs running SQL Server
+### Lab 1: Created 2 Virtual Networks with VMs running SQL Server
 
-
+![alt text](image-1.png)
 VM1 Overview Page
-
+![alt text](image.png)
 
 VM2 Overview Page
 
+![alt text](image-3.png)
+
 Vnet1 Overview Page
 
-Vnet1 subnets
-
-
+![alt text](image-2.png)
 Vnet2 Overview Page
 
-
-Vnet2 subnets
-
+![alt text](image-4.png)
 Public Ips
 
  
