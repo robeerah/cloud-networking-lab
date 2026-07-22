@@ -67,7 +67,8 @@ This repository documents the step-by-step implementation of a production-grade 
      ```
    - Run `ipconfig` on both VMs to note their private IPv4 addresses.
    - Execute `ping <IP_of_Other_VM>` from each machine to verify bidirectional tunnel success (0% packet loss).
-
+   
+Tutorial - Create S2S VPN connection between on-premises network and Azure virtual network: Azure portal - Azure VPN Gateway | Microsoft Learn
 ---
 
 ##  Phase 3: Point-to-Site (P2S) & Web App Integration

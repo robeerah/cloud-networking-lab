@@ -2,18 +2,18 @@
 
 ### Lab 1: Created 2 Virtual Networks with VMs running SQL Server
 
-![alt text](image-1.png)
-VM1 Overview Page
-![alt text](image.png)
+![VM1 Overview Page](image-1.png)
 
-VM2 Overview Page
+![VM2 Overview Page](image.png)
 
-![alt text](image-3.png)
 
-Vnet1 Overview Page
+
+![Vnet1 Overview Page](image-3.png)
+
+
 
 ![alt text](image-2.png)
-Vnet2 Overview Page
+
 
 ![alt text](image-4.png)
 Public Ips
@@ -22,7 +22,7 @@ Public Ips
  
 
 Lab 2: Connected the networks with a Site-to-Site VPN tunnel
-Tutorial - Create S2S VPN connection between on-premises network and Azure virtual network: Azure portal - Azure VPN Gateway | Microsoft Learn
+
 
 VPNs overview page
 
