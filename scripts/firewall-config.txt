@@ -1,0 +1,17 @@
+
+---
+
+### **File 5: scripts/firewall-config.txt**
+
+```txt
+# Firewall Configuration Scripts
+# Used to enable ICMP (ping) on Windows Server VMs
+
+# Command to enable incoming ICMPv4 echo requests
+netsh advfirewall firewall add rule name="ICMP Allow incoming V4 echo request" dir=in action=allow enable=yes protocol=icmpv4:8,any
+
+# Verification command
+netsh advfirewall firewall show rule name="ICMP Allow incoming V4 echo request"
+
+# Alternative: Enable all ICMP types (not recommended for production)
+# netsh advfirewall firewall add rule name="Allow ICMP" dir=in action=allow protocol=icmpv4:any,any
