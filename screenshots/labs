@@ -1,0 +1,96 @@
+Lab 1: Created 2 Virtual Networks with VMs running SQL Server
+
+
+VM1 Overview Page
+
+
+VM2 Overview Page
+
+Vnet1 Overview Page
+
+Vnet1 subnets
+
+
+Vnet2 Overview Page
+
+
+Vnet2 subnets
+
+Public Ips
+
+ 
+ 
+
+Lab 2: Connected the networks with a Site-to-Site VPN tunnel
+Tutorial - Create S2S VPN connection between on-premises network and Azure virtual network: Azure portal - Azure VPN Gateway | Microsoft Learn
+
+VPNs overview page
+
+VPN 1 (GW1) Overview Page
+
+VPN 2 (GW2)
+ 
+
+Local gateways
+
+Local-GW1 review and create validation page
+ 
+Local-GW1 overview page with Public IP of GW2
+Address name space 172.18.0.0/16 Vnet2’s range
+
+Local-GW2 review and create validation page
+
+
+Local-GW2 overview page with Public IP of GW1
+Address name space 172.17.0.0/16 Vnet2’s range
+
+Site to site connection between GW1 and GW2 validation page
+
+
+Site to site connection between GW1 and GW2 while waiting for the connection to take place which took 3 to 4 minutes
+
+Site to site connection between GW2 and GW1 validation page
+
+
+Site to site connection between GW2 and GW1 while waiting for the connection to take place which took 3 to 4 minutes
+
+VM1 showing there is communication in both directions across site-to-site connection
+
+VM2 showing there is communication in both directions across site-to-site connection
+
+Lab 3: Connected a Web App to the network using Point-to-Site VPN
+ 
+
+About Azure Point-to-Site VPN connections - Azure VPN Gateway | Microsoft Learn
+
+
+
+Point-to-Site configuration page showing the address Pool and the Certificate details.
+This took about 35 to 40 minutes
+
+Web App Overview Page
+
+
+
+
+
+Vnet integration configuration to Vnet 2
+
+Kudu CMD console showing the successful tcpping to VM2 “tcpping 172.18.0.4:3389”
+Kudu CMD console showing the successful tcpping to VM1 “tcpping 172.17.0.4:3389”
+ 
+Lab 4: Secured the Web App with Easy Auth authentication
+
+Quickstart - Add app authentication to a web app - Azure App Service | Microsoft Learn
+
+Authentication page showing that Microsoft is now configured as an identity provider
+
+
+Screenshots showing automatically redirected to a Microsoft login page URL: bootcampwebapp-rofiat-bzbjfkd3d6dcd2cd.southafricanorth-01.azurewebsites.net
+
+This proves easy Auth is working
+
+
+
+
+

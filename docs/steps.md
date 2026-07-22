@@ -122,4 +122,53 @@ This repository documents the step-by-step implementation of a production-grade 
    - Authenticate successfully to view the default Web App landing page.
 
 ---
+# Point-to-Site (P2S) VPN Configuration Challenge
+
+## 📌 Overview
+While configuring a Point-to-Site (P2S) VPN in Azure, I encountered a critical issue that prevented me from successfully creating the VPN client connection. This section documents the challenge, the root cause, and the resolution steps taken.
+
+---
+
+## 🚧 Challenge
+During the setup of the **Point-to-Site configuration** for the Virtual Network Gateway, I received the error:
+
+> **"Wrong template"**
+
+This error occurred when attempting to generate the VPN client package, which halted the process of establishing secure remote access to the Azure virtual network.
+
+---
+
+## 🔍 Root Cause
+After troubleshooting, I discovered that the error was caused by the absence of a **Public IP address** associated with the Virtual Network Gateway.  
+- The P2S configuration requires a valid Public IP to be linked.  
+- Without it, Azure could not generate the correct VPN client configuration template.
+
+---
+
+## ✅ Resolution
+To fix the issue, I followed these steps:
+
+1. **Created a Public IP address** in Azure.  
+   - Navigated to the Azure portal and provisioned a new Public IP resource.  
+   - Ensured it was properly configured and available.
+
+2. **Linked the Public IP to the Virtual Network Gateway.**  
+   - In the Point-to-Site configuration page, selected **“Use existing”** under the Public IP address option.  
+   - Chose the newly created Public IP.
+
+3. **Saved the configuration and downloaded the VPN client.**  
+   - After associating the Public IP, the error was resolved.  
+   - Successfully generated and downloaded the VPN client package.
+
+---
+
+## 🎯 Outcome
+By creating and attaching a Public IP address before proceeding with the P2S configuration, the **“wrong template”** error was eliminated. This allowed the VPN client to be properly generated and enabled secure connectivity to the Azure virtual network.
+
+---
+
+## 📖 Lessons Learned
+- Always ensure a **Public IP address** is created and linked to the Virtual Network Gateway before configuring Point-to-Site VPN.  
+- Proper sequencing of resource creation in Azure is critical to avoid configuration errors.  
+- Documenting troubleshooting steps helps streamline future projects and assists team members facing similar issues.
 
