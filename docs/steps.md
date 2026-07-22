@@ -1,9 +1,9 @@
 # Cloud Networking Lab: Hybrid Cloud Architecture
 
-## 📋 Project Overview
+##  Project Overview
 This repository documents the step-by-step implementation of a production-grade hybrid cloud network architecture using Azure Cloud services. This project simulates an enterprise environment where a cloud-based web application securely consumes resources from a simulated on-premises network via encrypted VPN tunnels.
 
-## 🎯 Key Objectives Achieved
+##  Key Objectives Achieved
 1. Designed and deployed isolated Virtual Networks (VNets) with segmented subnets.
 2. Established a bidirectional Site-to-Site (S2S) IPsec tunnel between two networks.
 3. Configured a Point-to-Site (P2S) VPN to securely connect a cloud Web App to the network.
@@ -12,14 +12,14 @@ This repository documents the step-by-step implementation of a production-grade 
 
 ---
 
-## 🏗️ Phase 1: Networks & Virtual Machines
+##  Phase 1: Networks & Virtual Machines
 
-### 💡 Core Concepts
+###  Core Concepts
 * **VNet (Virtual Network):** A private, isolated network in the XYZ Cloud.
 * **Subnet:** A smaller, segmented section inside a VNet (e.g., separating web and database tiers).
 * **VM (Virtual Machine):** A cloud-based compute instance.
 
-### ⚙️ Step-by-Step Implementation
+###  Step-by-Step Implementation
 1. **Create Resource Group:** 
    - Name: `BootCamp` | Region: `XYZ-Central-US`
 2. **Deploy VNet1:** 
@@ -42,9 +42,9 @@ This repository documents the step-by-step implementation of a production-grade 
 
 ---
 
-## 🌉 Phase 2: VPN Gateways & Site-to-Site (S2S)
+##  Phase 2: VPN Gateways & Site-to-Site (S2S)
 
-### 💡 Core Concepts
+###  Core Concepts
 * **VPN Gateway:** A specialized routing instance that connects networks securely.
 * **Site-to-Site (S2S):** An encrypted IPsec tunnel connecting two entire networks.
 * **Local Network Gateway:** A configuration object defining the remote network's public IP and private address space.
@@ -70,14 +70,14 @@ This repository documents the step-by-step implementation of a production-grade 
 
 ---
 
-## 📱 Phase 3: Point-to-Site (P2S) & Web App Integration
+##  Phase 3: Point-to-Site (P2S) & Web App Integration
 
-### 💡 Core Concepts
+###  Core Concepts
 * **Point-to-Site (P2S):** Connects a single resource (the Web App) to a VNet.
 * **Certificates:** Cryptographic "ID badges" used to authenticate the Web App to the XYZ Cloud gateway.
 * **Kudu / SCM Console:** A backend diagnostic command-line interface for XYZ Web Apps.
 
-### ⚙️ Step-by-Step Implementation
+###  Step-by-Step Implementation
 1. **Generate Root Certificate** (Local Windows PC):
    - Run in PowerShell (Admin):
      ```powershell
@@ -103,12 +103,12 @@ This repository documents the step-by-step implementation of a production-grade 
 
 ---
 
-## 🔒 Phase 4: Easy Auth (App Service Authentication)
+##  Phase 4: Easy Auth (App Service Authentication)
 
-### 💡 Core Concepts
+###  Core Concepts
 * **Easy Auth:** A built-in XYZ Cloud feature that acts as a "bouncer," intercepting all web traffic and requiring valid identity provider authentication before granting access to the application.
 
-### ⚙️ Step-by-Step Implementation
+###  Step-by-Step Implementation
 1. **Configure Authentication**:
    - Navigate to Web App → **Authentication** → **Add identity provider**.
    - Provider: `XYZ Identity Provider` (or XYZ Entra ID).
@@ -124,12 +124,12 @@ This repository documents the step-by-step implementation of a production-grade 
 ---
 # Point-to-Site (P2S) VPN Configuration Challenge
 
-## 📌 Overview
+##  Overview
 While configuring a Point-to-Site (P2S) VPN in Azure, I encountered a critical issue that prevented me from successfully creating the VPN client connection. This section documents the challenge, the root cause, and the resolution steps taken.
 
 ---
 
-## 🚧 Challenge
+##  Challenge
 During the setup of the **Point-to-Site configuration** for the Virtual Network Gateway, I received the error:
 
 > **"Wrong template"**
@@ -138,14 +138,14 @@ This error occurred when attempting to generate the VPN client package, which ha
 
 ---
 
-## 🔍 Root Cause
+##  Root Cause
 After troubleshooting, I discovered that the error was caused by the absence of a **Public IP address** associated with the Virtual Network Gateway.  
 - The P2S configuration requires a valid Public IP to be linked.  
 - Without it, Azure could not generate the correct VPN client configuration template.
 
 ---
 
-## ✅ Resolution
+##  Resolution
 To fix the issue, I followed these steps:
 
 1. **Created a Public IP address** in Azure.  
@@ -162,12 +162,12 @@ To fix the issue, I followed these steps:
 
 ---
 
-## 🎯 Outcome
+##  Outcome
 By creating and attaching a Public IP address before proceeding with the P2S configuration, the **“wrong template”** error was eliminated. This allowed the VPN client to be properly generated and enabled secure connectivity to the Azure virtual network.
 
 ---
 
-## 📖 Lessons Learned
+##  Lessons Learned
 - Always ensure a **Public IP address** is created and linked to the Virtual Network Gateway before configuring Point-to-Site VPN.  
 - Proper sequencing of resource creation in Azure is critical to avoid configuration errors.  
 - Documenting troubleshooting steps helps streamline future projects and assists team members facing similar issues.

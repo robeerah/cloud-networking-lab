@@ -8,7 +8,7 @@
 
 ---
 
-## 📖 Project Overview
+## Project Overview
 
 This project demonstrates the implementation of a **hybrid networking environment in Microsoft Azure**, simulating an enterprise architecture where Azure resources securely communicate with an on-premises network.
 
@@ -29,7 +29,7 @@ The project includes:
 
 ---
 
-# 🎯 Project Objectives
+# Project Objectives
 
 The objectives of this lab were to:
 
@@ -45,7 +45,7 @@ The objectives of this lab were to:
 
 ---
 
-# 🏗 Architecture
+# Architecture
 
 ```
 
@@ -77,7 +77,7 @@ SQL Server
 
 ---
 
-# ☁️ Azure Services Used
+# Azure Services Used
 
 - Azure Resource Groups
 - Azure Virtual Network
@@ -95,7 +95,7 @@ SQL Server
 
 ---
 
-# 🛠 Technologies Used
+#  Technologies Used
 
 - Microsoft Azure
 - Azure Portal
@@ -111,7 +111,9 @@ SQL Server
 
 ---
 
-# 🚀 Lab Implementation
+#  Lab Implementation
+
+Note: Full detail in steps.md file
 
 ## Lab 1 – Create Azure Virtual Network 1
 
@@ -252,47 +254,31 @@ The Azure Web App was secured using built-in authentication without modifying ap
 
 ---
 
-# 🔍 Validation Tests
+#  Validation Tests
 
 The following validations were successfully completed:
 
-✅ Site-to-Site VPN Connected
+ Site-to-Site VPN Connected
 
-✅ Point-to-Site Connectivity
+ Point-to-Site Connectivity
 
-✅ VM1 can communicate with VM2
+ VM1 can communicate with VM2
 
-✅ VM2 can communicate with VM1
+ VM2 can communicate with VM1
 
-✅ Azure Web App connected to VNet
+ Azure Web App connected to VNet
 
-✅ Azure Web App reached both virtual machines
+ Azure Web App reached both virtual machines
 
-✅ SQL Server Connectivity Successful
+ SQL Server Connectivity Successful
 
-✅ Easy Authentication Enabled
-
----
-
-# 📂 Repository Structure
-
-```
-
-azure-hybrid-networking-lab/
-│
-├── README.md
-├── architecture/
-├── screenshots/
-├── docs/
-│ ├── implementation-steps.md
-│ ├── troubleshooting.md
-│ └── lessons-learned.md
-
-```
+ Easy Authentication Enabled
 
 ---
 
-# 📸 Screenshots
+---
+
+#  Screenshots
 
 Include screenshots of:
 
@@ -311,7 +297,7 @@ Include screenshots of:
 
 ---
 
-# ⚠ Challenges Encountered
+#  Challenges Encountered
 
 ### Site-to-Site VPN Connection
 
@@ -322,6 +308,12 @@ VPN connection did not establish initially.
 **Resolution**
 
 Verified gateway configuration and corrected the shared key.
+
+### Point-to-Site (P2S) VPN Configuration Challenge
+
+**Resolution**
+
+Check steps.md for details
 
 ---
 
@@ -349,7 +341,7 @@ Verified SQL Server firewall configuration and network connectivity.
 
 ---
 
-# 📚 Key Learnings
+#  Key Learnings
 
 Through this project I gained hands-on experience with:
 
@@ -367,7 +359,7 @@ Through this project I gained hands-on experience with:
 
 ---
 
-# 💡 Skills Demonstrated
+#  Skills Demonstrated
 
 - Azure Administration
 - Azure Networking
@@ -382,7 +374,7 @@ Through this project I gained hands-on experience with:
 
 ---
 
-# 📖 References
+#  References
 
 - Microsoft Learn – Azure Virtual Network Documentation
 - Microsoft Learn – Azure VPN Gateway Documentation
@@ -392,9 +384,9 @@ Through this project I gained hands-on experience with:
 
 ---
 
-## 👩‍💻 Author
+##  Author
 
-**Rofiat Ahmed**
+**Rofiat Ahmed Sholagberu**
 
 Azure Support Engineer | Cloud & DevOps Engineer
 
