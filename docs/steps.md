@@ -1,144 +1,125 @@
-Phase 1: Lab 1 (Networks & Virtual Machines)
+# Cloud Networking Lab: Hybrid Cloud Architecture
 
-Concept:
-VNet (Virtual Network): Your private, isolated network in the cloud.
-Subnet: A smaller segment inside your VNet (think of the VNet as a house, and Subnets as rooms).
-VM (Virtual Machine): A cloud-based computer.
+## 📋 Project Overview
+This repository documents the step-by-step implementation of a production-grade hybrid cloud network architecture using Azure Cloud services. This project simulates an enterprise environment where a cloud-based web application securely consumes resources from a simulated on-premises network via encrypted VPN tunnels.
 
-Step-by-Step:
+## 🎯 Key Objectives Achieved
+1. Designed and deployed isolated Virtual Networks (VNets) with segmented subnets.
+2. Established a bidirectional Site-to-Site (S2S) IPsec tunnel between two networks.
+3. Configured a Point-to-Site (P2S) VPN to securely connect a cloud Web App to the network.
+4. Implemented Easy Auth (App Service Authentication) to secure web application access.
+5. Successfully validated cross-network connectivity and port-specific routing.
 
-Create the Resource Group (Container)
-Search for Resource groups > Create.
-Name: BootCamp | Region: South Central US > Review + Create.
+---
 
-Create VNet1
-Search Virtual networks > Create.
-Name: Vnet1 | Region: South Central US | Resource Group: BootCamp.
-IP Address space: 172.17.0.0/16
-Default subnet name: sub1 | Default subnet range: 172.17.0.0/24
-Important: Go to the Service Endpoints tab (or Security tab depending on portal version), enable it, and select Microsoft.Sql. > Review + Create.
+## 🏗️ Phase 1: Networks & Virtual Machines
 
-Create Public IP 1
-Search Public IP addresses > Create.
-Name: PublicIP-VM1 | Resource Group: BootCamp > Review + Create.
+### 💡 Core Concepts
+* **VNet (Virtual Network):** A private, isolated network in the XYZ Cloud.
+* **Subnet:** A smaller, segmented section inside a VNet (e.g., separating web and database tiers).
+* **VM (Virtual Machine):** A cloud-based compute instance.
 
-Create VM1
-Search Virtual machines > Create.
-Name: VM1 | Region: South Central US | Image: Free SQL Server License: SQL Server 2017 Express on Windows Server 2016.
-Size: Click "See all sizes" and select Standard_B2s.
-Username/Password: (Create something memorable, e.g., azureuser / AzureLab123!).
-Public IP: Select PublicIP-VM1.
-Virtual Network: Vnet1 | Subnet: sub1.
-Go to Networking tab: Ensure Inbound port rules allow RDP (3389). > Review + Create.
+### ⚙️ Step-by-Step Implementation
+1. **Create Resource Group:** 
+   - Name: `BootCamp` | Region: `XYZ-Central-US`
+2. **Deploy VNet1:** 
+   - Name: `Vnet1` | Address Space: `172.17.0.0/16`
+   - Subnet: `sub1` | Range: `172.17.0.0/24`
+   - *Security:* Enable Service Endpoint for `XYZ.Sql`.
+3. **Create Public IP:** 
+   - Name: `PublicIP-VM1` (Standalone resource).
+4. **Deploy VM1:** 
+   - Image: `Free XYZ SQL Server License: SQL Server 2017 Express on Windows Server 2016`
+   - Size: `Standard_B2s` | Network: `Vnet1` / `sub1` | Public IP: `PublicIP-VM1`
+   - *Networking:* Ensure inbound RDP (3389) is allowed.
+5. **Deploy VNet2:** 
+   - Name: `VNet2` | Address Space: `172.18.0.0/16`
+   - Subnet `sub2a`: `172.18.0.0/24` (Enable `XYZ.Sql` Service Endpoint)
+   - Subnet `sub2b`: `172.18.1.0/24` (Added post-creation for network segmentation practice).
+6. **Deploy VM2:** 
+   - Image/Size: Same as VM1 | Network: `VNet2` / `sub2a`
+   - Public IP: Generated dynamically during VM creation wizard.
 
-Create VNet2
-Repeat VNet creation. Name: VNet2.
-IP Address space: 172.18.0.0/16 | Subnet: sub2a | Range: 172.18.0.0/24.
-Enable Service Endpoint for Microsoft.Sql.
-After creating VNet2, go to its Subnets blade and Add a new subnet: Name sub2b, Range 172.18.1.0/24.
+---
 
-Create VM2
-Create VM. Name: VM2 | Same SQL Image | Size: B2s.
-Public IP: Select Create new (let the wizard generate it).
-Virtual Network: VNet2 | Subnet: sub2a.
+## 🌉 Phase 2: VPN Gateways & Site-to-Site (S2S)
 
+### 💡 Core Concepts
+* **VPN Gateway:** A specialized routing instance that connects networks securely.
+* **Site-to-Site (S2S):** An encrypted IPsec tunnel connecting two entire networks.
+* **Local Network Gateway:** A configuration object defining the remote network's public IP and private address space.
 
-Phase 2: Lab 2 (VPN Gateways & Site-to-Site)
+### ⚙️ Step-by-Step Implementation
+1. **Deploy VPN Gateways** *(Note: Takes 30-40 mins to provision)*:
+   - **GW1:** Network `Vnet1` | Type: `VPN` | VPN Type: `Route-based` | SKU: `VpnGw1` | Public IP: `PIP-GW1`
+   - **GW2:** Network `VNet2` | Type: `VPN` | VPN Type: `Route-based` | SKU: `VpnGw1` | Public IP: `PIP-GW2`
+2. **Configure Local Network Gateways**:
+   - **Local-GW1:** Points to GW2's Public IP | Address Space: `172.18.0.0/16` (VNet2's range).
+   - **Local-GW2:** Points to GW1's Public IP | Address Space: `172.17.0.0/16` (VNet1's range).
+3. **Establish S2S Connections**:
+   - On **GW1**: Create Connection `Conn-GW1-to-GW2` → Type: `Site-to-Site (IPsec)` → Local Gateway: `Local-GW1` → Shared Key: `XYZLab123!`
+   - On **GW2**: Create Connection `Conn-GW2-to-GW1` → Type: `Site-to-Site (IPsec)` → Local Gateway: `Local-GW2` → Shared Key: `XYZLab123!` *(Must match exactly)*.
+4. **Validate Connectivity**:
+   - RDP into both VMs. Open **Administrator Command Prompt** on each.
+   - Enable ICMP (Ping) through the Windows Firewall on both VMs:
+     ```cmd
+     netsh advfirewall firewall add rule name="ICMP Allow incoming V4 echo request" dir=in action=allow enable=yes protocol=icmpv4:8,any
+     ```
+   - Run `ipconfig` on both VMs to note their private IPv4 addresses.
+   - Execute `ping <IP_of_Other_VM>` from each machine to verify bidirectional tunnel success (0% packet loss).
 
-Concept:
-VPN Gateway: A special "bridge" that connects two networks together.
-Site-to-Site (S2S): A secure tunnel connecting two entire networks (VNet1 and VNet2).
-Local Network Gateway: A configuration object that tells your gateway where the other network is and what its IP addresses are.
+---
 
-Tutorial - Create S2S VPN connection between on-premises network and Azure virtual network: Azure portal - Azure VPN Gateway | Microsoft Learn
+## 📱 Phase 3: Point-to-Site (P2S) & Web App Integration
 
-Step-by-Step:
-Create the Gateways (Start these immediately, they take 30-40 mins!)
-Search for Virtual network gateways > Create.
-GW1: Name: GW1 | Region: South Central US | Network: Vnet1 | Gateway type: VPN | VPN type: Route-based | SKU: VpnGw1 (or Basic). Create a new Public IP named PIP-GW1.
-GW2: Repeat the process for VNet2. Name: GW2, Public IP: PIP-GW2.
+### 💡 Core Concepts
+* **Point-to-Site (P2S):** Connects a single resource (the Web App) to a VNet.
+* **Certificates:** Cryptographic "ID badges" used to authenticate the Web App to the XYZ Cloud gateway.
+* **Kudu / SCM Console:** A backend diagnostic command-line interface for XYZ Web Apps.
 
-Create Local Network Gateways
-Search Local network gateways > Create.
-Local-GW1: Name: Local-GW1. IP Address: Copy the Public IP of GW2 from the GW2 overview page. Address space: 172.18.0.0/16 (This is VNet2's range).
-Local-GW2: Name: Local-GW2. IP Address: Copy the Public IP of GW1 from the GW1 overview page. Address space: 172.17.0.0/16 (This is VNet1's range).
+### ⚙️ Step-by-Step Implementation
+1. **Generate Root Certificate** (Local Windows PC):
+   - Run in PowerShell (Admin):
+     ```powershell
+     $cert = New-SelfSignedCertificate -Type Custom -KeySpec Signature -Subject "CN=P2SRootCert" -KeyExportPolicy Exportable -HashAlgorithm sha256 -KeyLength 2048 -CertStoreLocation "Cert:\CurrentUser\My" -KeyUsageProperty Sign -KeyUsage CertSign
+     ```
+   - Open `certmgr.msc`, locate `P2SRootCert` under *Personal > Certificates*.
+   - Export → **No, do not export the private key** → **Base-64 encoded X.509 (.CER)**.
+   - Open the `.cer` file in Notepad and copy the text between `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----`.
+2. **Configure P2S on GW2**:
+   - Address Pool: `172.19.0.0/24` *(Must not overlap with existing VNets)*.
+   - Authentication: `XYZ certificate`.
+   - Root Cert Name: `P2SRootCert` | Paste the Base-64 text into Public Certificate Data.
+   - *Crucial:* Uncheck "IKEv2 VPN" (leave only SSTP checked). Save.
+3. **Deploy Web App & VNet Integration**:
+   - Name: `BootCampWebApp-[initials]` | OS: `Windows` | Plan: `Basic B1` (Required for VNet Integration).
+   - Navigate to **Networking** → **VNet Integration** → Add → Select `VNet2`.
+4. **Update Routing for Cross-Network Access**:
+   - Open **Local-GW2** → Add Address Space: `172.19.0.0/24` (The P2S pool). This allows the S2S tunnel to route Web App traffic back to VNet1.
+5. **Validate Connectivity via Kudu**:
+   - Open Web App → **Advanced Tools** (Kudu) → **Debug Console** → **CMD**.
+   - Test connection to VM2: `tcpping <VM2_Private_IP>:3389`
+   - Test connection to VM1: `tcpping <VM1_Private_IP>:3389` *(Validates the full P2S → S2S path)*.
 
-Create the S2S Connections
-Go to GW1 > Connections > Add.
-Name: Conn-GW1-to-GW2 | Connection type: Site-to-Site (IPsec).
-Local network gateway: Local-GW1 | Shared key (PSK): AzureLab123! (Make up a key, but remember it).
-Go to GW2 > Connections > Add.
-Name: Conn-GW2-to-GW1 | Connection type: Site-to-Site (IPsec).
-Local network gateway: Local-GW2 | Shared key: AzureLab123! (Must match exactly).
-Wait a few minutes until both connections show a status of Connected.
-Test the Connection (Ping)
-Go to VM1 > Connect > RDP. Download the RDP file and log in with your VM credentials.
-Open Command Prompt as Administrator.
-Run this exact command to allow ping through the Windows Firewall:netsh advfirewall firewall add rule name="ICMP Allow incoming V4 echo request" dir=in action=allow enable=yes protocol=icmpv4:8,any
-Type ipconfig and note the IPv4 Address of VM1.
-Repeat this exact process (RDP, Firewall rule, ipconfig) for VM2.
-From VM1's command prompt, type: ping <IP_of_VM2>
+---
 
+## 🔒 Phase 4: Easy Auth (App Service Authentication)
 
-Phase 3: Lab 3 (Point-to-Site & Web App)
-About Azure Point-to-Site VPN connections - Azure VPN Gateway | Microsoft Learn
+### 💡 Core Concepts
+* **Easy Auth:** A built-in XYZ Cloud feature that acts as a "bouncer," intercepting all web traffic and requiring valid identity provider authentication before granting access to the application.
 
-Concept:
-Point-to-Site (P2S): Connects a single device (in this case, your Web App) to a VNet.
-Certificates: Used to authenticate the Web App so Azure trusts it to connect to the VNet.
-Kudu / SCM Console: A hidden backend command prompt for your Web App used for debugging.
+### ⚙️ Step-by-Step Implementation
+1. **Configure Authentication**:
+   - Navigate to Web App → **Authentication** → **Add identity provider**.
+   - Provider: `XYZ Identity Provider` (or XYZ Entra ID).
+   - App Registration: `Create new`.
+   - Unrestricted Access: Select **Require authentication**.
+   - Save configuration.
+2. **Validate Login Flow**:
+   - Open an Incognito/Private browser window.
+   - Navigate to `https://bootcampwebapp-[initials].xyzwebsites.net`.
+   - Verify automatic redirection to the XYZ Login screen.
+   - Authenticate successfully to view the default Web App landing page.
 
-Step-by-Step:
-Generate Certificates (On your local Windows PC)
-Open PowerShell on your local computer and run:
-Type certmgr.msc and press Enter. Find P2SRootCert under Personal > Certificates.
-Right-click > All Tasks > Export. Choose NO, do not export the private key. Choose Base-64 encoded X.509 (.CER). Save it to your desktop.
-Open the saved .cer file with Notepad. Copy everything between -----BEGIN CERTIFICATE----- and -----END CERTIFICATE-----.
-Configure P2S on GW2
-Go to GW2 > Point-to-site configuration > Configure now.
-Address pool: 172.19.0.0/24 (Must be different from your VNets!).
-Authentication type: Azure certificate.
-Root cert name: P2SRootCert. Paste the Notepad text into Public Certificate Data.
-Important: Uncheck "IKEv2 VPN" (leave SSTP checked). Save.
+---
 
-Create Web App & VNet Integration
-Search App Services > Create.
-Name: BootCampWebApp-[yourinitials] | Publish: Code | OS: Windows | Region: South Central US.
-Create a new App Service Plan (Basic B1 is fine).
-Once deployed, go to the Web App > Networking > VNet Integration > Add VNet.
-Select VNet2 > Add.
-Update Local Gateway for VM1 Routing
-Why? Right now, the Web App can reach VNet2 (VM2). But to reach VNet1 (VM1), the S2S tunnel needs to know about the Web App's P2S IP pool.
-Search Local network gateways > Open Local-GW2.
-In the Address space section, click Add address space and type 172.19.0.0/24. Save.
-Test Pings from Web App (Kudu Console)
-Go to your Web App > Advanced Tools (or search Kudu) > Go.
-At the top, click Debug console > CMD.
-Find the IP of VM2 (from Phase 2) and type: tcpping <VM2_IP>:3389
-Find the IP of VM1 and type: tcpping <VM1_IP>:3389
-
-
-
-Phase 4: Lab 4 (Easy Auth)
-
-Quickstart - Add app authentication to a web app - Azure App Service | Microsoft Learn
-Concept:
-
-Easy Auth (App Service Authentication): A feature that puts a "bouncer" at the door of your Web App. Nobody can see the app unless they log in with a valid identity (like a Microsoft or GitHub account).
-
-Step-by-Step:
-Configure Easy Auth
-Go to your Web App in the Azure Portal.
-On the left menu, click Authentication.
-Click Add identity provider.
-Identity Provider: Microsoft (or Microsoft Entra ID).
-Client secret: Leave as default or create new if prompted.
-Unrestricted access: Select Require authentication.
-Click Add / Save.
-Test the Login
-
-
-
-Open a Private/Incognito browser window.
-Navigate to your Web App's URL (e.g., https://bootcampwebapp-xxx.azurewebsites.net).
-You will be redirected to a Microsoft Login screen. Log in with your Microsoft account.
