@@ -1,96 +1,95 @@
+# Cloud Networking Lab
 
 
-### Lab 1: Created 2 Virtual Networks with VMs running SQL Server
+---
 
-![VM1 Overview Page](image-1.png)
+## Lab 1: Created 2 Virtual Networks with VMs Running SQL Server
 
-![VM2 Overview Page](image.png)
+- Provisioned two Virtual Networks (VNet1 and VNet2) in Azure
+- Deployed Virtual Machines running SQL Server in each VNet
+- Configured public IPs for both VMs
 
-
-
-![Vnet1 Overview Page](image-3.png)
-
-
-
+### Screenshots
+![alt text](image.png)
+- VM1 Overview Page
+![alt text](image-1.png)
+- VM2 Overview Page
 ![alt text](image-2.png)
-
-
+- VNet1 Overview Page
 ![alt text](image-4.png)
-Public Ips
+- VNet2 Overview Page
+![alt text](image-5.png)
+- Public IPs Overview
 
- 
- 
+---
 
-Lab 2: Connected the networks with a Site-to-Site VPN tunnel
+## Lab 2: Connected the Networks with a Site-to-Site VPN Tunnel
 
+- Created two VPN Gateways (GW1 and GW2)
+- Configured Local Network Gateways:
+  - **Local-GW1**: Points to GW2's public IP, address space `172.18.0.0/16` (VNet2's range)
+  - **Local-GW2**: Points to GW1's public IP, address space `172.17.0.0/16` (VNet1's range)
+- Established Site-to-Site connections between GW1 ↔ GW2 (connection took 3–4 minutes each)
+- Verified bidirectional communication between VM1 and VM2
 
-VPNs overview page
+### Screenshots
+![alt text](image-3.png)
+- VPNs Overview Page
+![alt text](image-8.png)
+![alt text](image-7.png)
+- GW1 and GW2 Overview Pages
+![alt text](image-6.png)
+- Local Gateway configurations and validation pages
+![alt text](image-9.png)
+![alt text](image-10.png)
 
-VPN 1 (GW1) Overview Page
+![alt text](image-11.png)
+![alt text](image-12.png)
+- Site-to-Site connection validation pages
+![alt text](image-13.png)
+![alt text](image-14.png)
+- VM1 and VM2 confirming bidirectional communication
 
-VPN 2 (GW2)
- 
+---
 
-Local gateways
+## Lab 3: Connected a Web App to the Network Using Point-to-Site VPN
 
-Local-GW1 review and create validation page
- 
-Local-GW1 overview page with Public IP of GW2
-Address name space 172.18.0.0/16 Vnet2’s range
+- Configured Point-to-Site VPN on the VPN Gateway
+  - Set address pool and certificate details
+  - Configuration took approximately 35–40 minutes
+- Deployed an Azure Web App and integrated it with VNet2
+- Verified connectivity using Kudu CMD console:
+  - `tcpping 172.18.0.4:3389` → VM2 ✅
+  - `tcpping 172.17.0.4:3389` → VM1 ✅
 
-Local-GW2 review and create validation page
+### Reference
+- [About Azure Point-to-Site VPN connections - Microsoft Learn](https://learn.microsoft.com/azure/vpn-gateway/point-to-site-about)
 
+### Screenshots
+![alt text](image-17.png)
+- Point-to-Site configuration page
+![alt text](image-18.png)
+- Web App Overview Page
+![alt text](image-16.png)
+- VNet integration configuration to VNet2
+![alt text](image-15.png)
+- Kudu CMD console tcpping results
 
-Local-GW2 overview page with Public IP of GW1
-Address name space 172.17.0.0/16 Vnet2’s range
+---
 
-Site to site connection between GW1 and GW2 validation page
+## Lab 4: Secured the Web App with Easy Auth Authentication
 
-
-Site to site connection between GW1 and GW2 while waiting for the connection to take place which took 3 to 4 minutes
-
-Site to site connection between GW2 and GW1 validation page
-
-
-Site to site connection between GW2 and GW1 while waiting for the connection to take place which took 3 to 4 minutes
-
-VM1 showing there is communication in both directions across site-to-site connection
-
-VM2 showing there is communication in both directions across site-to-site connection
-
-Lab 3: Connected a Web App to the network using Point-to-Site VPN
- 
-
-About Azure Point-to-Site VPN connections - Azure VPN Gateway | Microsoft Learn
-
-
-
-Point-to-Site configuration page showing the address Pool and the Certificate details.
-This took about 35 to 40 minutes
-
-Web App Overview Page
-
-
-
-
-
-Vnet integration configuration to Vnet 2
-
-Kudu CMD console showing the successful tcpping to VM2 “tcpping 172.18.0.4:3389”
-Kudu CMD console showing the successful tcpping to VM1 “tcpping 172.17.0.4:3389”
- 
-Lab 4: Secured the Web App with Easy Auth authentication
-
-Quickstart - Add app authentication to a web app - Azure App Service | Microsoft Learn
-
-Authentication page showing that Microsoft is now configured as an identity provider
+- Enabled Easy Auth on the Azure Web App
+- Configured Microsoft as the identity provider
+- Verified automatic redirection to Microsoft login page
 
 
-Screenshots showing automatically redirected to a Microsoft login page URL: bootcampwebapp-rofiat-bzbjfkd3d6dcd2cd.southafricanorth-01.azurewebsites.net
+### Screenshots
+![alt text](image-21.png)
+- Authentication page showing Microsoft as identity provider
+![alt text](image-19.png)
+![alt text](image-20.png)
+- Microsoft login redirect confirmation
 
-This proves easy Auth is working
-
-
-
-
+---
 
